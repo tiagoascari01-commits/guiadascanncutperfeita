@@ -452,12 +452,28 @@
     });
   })();
 
-  // CTA buttons scroll to pricing
+  // Redireciona com window.location.href, repassando os parâmetros da URL atual (UTMs etc.)
+  function goWithParams(url) {
+    var s = window.location.search;
+    if (s && s.length > 1) {
+      url += (url.indexOf('?') > -1 ? '&' : '?') + s.substring(1);
+    }
+    window.location.href = url;
+  }
+
+  // CTA buttons: checkout nos botões de compra, scroll nos demais
   document.querySelectorAll('[data-cta]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var el = document.getElementById('planos');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    });
+    var t = (b.textContent || '').trim();
+    if (t === 'QUERO O BÁSICO') {
+      b.addEventListener('click', function () { goWithParams('https://pay.lowify.com.br/checkout.php?product_id=68mmec'); });
+    } else if (t === 'QUERO O COMPLETO AGORA') {
+      b.addEventListener('click', function () { goWithParams('https://pay.lowify.com.br/go.php?offer=205b24d3'); });
+    } else {
+      b.addEventListener('click', function () {
+        var el = document.getElementById('planos');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
   });
 
   // Proteção: bloquear arrastar, menu de contexto, cópia e atalhos de inspecionar
